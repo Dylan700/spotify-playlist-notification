@@ -1,0 +1,45 @@
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  check-playlists:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+        - name: Get Playlist Data Cache
+          uses: actions/cache@v3
+          with:
+            path: ./playlist_cache
+            key: ${{ runner.os }}-cache-${{ github.run_number }}-${{ github.run_id }}
+            restore-keys: |
+              ${{ runner.os }}-cache-
+        - name: Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+            cache: 'yarn'
+            cache-dependency-path: 'yarn.lock'
+        - name: Install Dependencies
+          run: yarn install --immutable
+        - name: Build
+          run: yarn dist
+        - name: Run Spotify Notification Script
+          env: 
+            SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+            SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+            SPOTIFY_USER_ID: ${{ secrets.SPOTIFY_USER_ID }}
+            EMAILS: ${{ secrets.EMAILS }}
+            SMTP_HOST: ${{ secrets.SMTP_HOST }}
+            SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+            SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+            SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          run: |
+            cd ./dist/
+            node ./index.js
+        - name: Update Playlist Cache 
+          uses: actions/cache@v3
+          with:
+            path: ./playlist_cache
+            key: ${{ runner.os }}-cache-${{ github.run_number }}-${{ github.run_id }}
+        
+
