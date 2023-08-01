@@ -147,6 +147,7 @@ function getRandomGreeting(): string {
 		"Hey there Delilah, don't you worry about tommorrow :)",
 		"Hey, I'm back in black!",
 		"Hey, let's cut right to the chase...",
+		"Welcome to the Hotel California (such a lovely place!)",
 	]
 	const randomIndex = Math.floor(Math.random() * greetings.length)
 	return greetings[randomIndex]
@@ -176,7 +177,13 @@ function getRandomSecondaryMessage(): string {
 		"I hope they're vegan-compatible.",
 		"What can I say?",
 		"If this email does not display properly, sorry about that, but I am pretty busy so can't do much right now, so just deal with it I guess :)",
-		"Let's hope they're good songs this time! (none of that emo stuff)"
+		"Let's hope they're good songs this time! (none of that emo stuff)",
+		"Well, I guess that's why they call it the blues :/",
+		"At first I was afraid, I was petrified... meh I'll survive.",
+		"There's an old voice in my head, that's holding me back. Well, tell her that I miss our little talks.",
+		"Alright, hit the road jack and don't ya come back.",
+		"We don't need no education, hey, teacher, leave them kids alone!",
+		"Oh look, I can see a new horizon underneath the blazin' sky. I'll be where the eagle's flying higher and higher."
 	]
 	const randomIndex = Math.floor(Math.random() * secondary.length)
 	return secondary[randomIndex]
