@@ -1,4 +1,6 @@
-<img style="display: block; margin: auto" height="auto" width="50%" src="./images/Spotify_Logo_RGB_Green.png">
+<p align="center">
+	<img height="auto" width="50%" src="./images/Spotify_Logo_RGB_Green.png">
+</p>
 <hr>
 
 > DISCLAIMER: This project is not ascociated or endorsed by Spotify in any way, use at your own risk.
