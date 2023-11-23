@@ -52,26 +52,26 @@ async function main(){
 		clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 	})
 	const data = await api.clientCredentialsGrant()
-	// console.log("The access token expires in " + data.body["expires_in"])
+	// console.debug("The access token expires in " + data.body["expires_in"])
 	api.setAccessToken(data.body["access_token"])
 	const playlistResponse = await api.getUserPlaylists(process.env.SPOTIFY_USER_ID, {})
 
 	// PLEASE NOTE: this foreach does not execute in order becauase the function is async.
 	playlistResponse.body.items.forEach(async (playlist) => {
-		console.log(`Playlist "${playlist.name}" has an ID of ${playlist.id} and contains ${playlist.tracks.total} songs.`)
+		//console.debug(`Playlist "${playlist.name}" has an ID of ${playlist.id} and contains ${playlist.tracks.total} songs.`)
 		const currentData = ""+playlist.tracks.total
 		// first check if the playlist has a cache file
 		const cache = await readFile(`../playlist_cache/${playlist.id}`)
 		if(cache != null){
 			// check if it's changed
 			if(cache != currentData){
-				console.log("Playlist has changed!")
+				//console.debug("Playlist has changed!")
 				await notify(getArrayOfStrings(process.env.EMAILS), [playlist])
 			}else{
-				console.log("Playlist has not changed.")
+				//console.debug("Playlist has not changed.")
 			}
 		}else{
-			console.log("Playlist cache data does not exist.")
+			//console.debug("Playlist cache data does not exist.")
 		}
 		// update the cache
 		await createFile(`../playlist_cache/${playlist.id}`, currentData) // for now we are just seeing how many songs the playlist has, an improved approach would create a hash based on the names and artist of each song
@@ -83,7 +83,7 @@ async function createFile(filePath: string, content: string): Promise<void> {
 		const directory = dirname(filePath)
 		await fs.mkdir(directory, { recursive: true })
 		await fs.writeFile(filePath, content)
-		console.log(`File ${filePath} created successfully.`)
+		//console.debug(`File ${filePath} created successfully.`)
 	} catch (error) {
 		console.error(`Error creating file ${filePath}: ${error}`)
 	}
@@ -128,7 +128,7 @@ async function notify(emails: string[], playlists: SpotifyApi.PlaylistBaseObject
 		to: emails,
 		subject: "Spotify Playlist Update Notification",
 		html: html
-	}, (e, info) => e ? console.error(e) : console.log(info))
+	}, (e, info) => e ? console.error(e) : console.debug(info))
 	return
 }
 
